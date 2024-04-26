@@ -146,13 +146,13 @@ func (c *Client) postMultipartFile(endpoint string, fileName string, opts Option
 		return nil, fmt.Errorf("error adding file: %w", err)
 	}
 
-	// write the options to the buffer
-	writeOptions(writer, opts)
-
 	// copy the file contents into the form
 	if _, err = io.Copy(formWriter, file); err != nil {
 		return nil, fmt.Errorf("error copying file: %w", err)
 	}
+
+	// write the options to the buffer
+	writeOptions(writer, opts)
 
 	// close the writer before doing request to get closing line on multipart request
 	if err := writer.Close(); err != nil {

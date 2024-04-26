@@ -172,6 +172,18 @@ func (c *Client) AddNewTorrentViaUrl(url, path string, tags ...string) error {
 	return err
 }
 
+func (c *Client) AddNewTorrentViaFile(file string, opt Optional) error {
+	resp, err := c.postMultipartFile("torrents/add", file, opt)
+	err = RespOk(resp, err)
+	if err != nil {
+		return err
+	}
+	if err = RespBodyOk(resp.Body, ErrAddTorrnetfailed); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (c *Client) TorrentList(opt Optional) ([]Torrent, error) {
 	resp, err := c.postXwwwFormUrlencoded("torrents/info", opt)
 
